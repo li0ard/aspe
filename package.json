@@ -1,0 +1,45 @@
+{
+  "name": "@li0ard/aspe",
+  "version": "0.1.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "author": "li0ard",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/li0ard/aspe.git"
+  },
+  "bugs": {
+    "url": "https://github.com/li0ard/aspe/issues"
+  },
+  "homepage": "https://github.com/li0ard/aspe#readme",
+  "description": "simple library for Ariadne Signature Profile (ASP)",
+  "license": "MIT",
+  "scripts": {
+    "build": "rm -rf dist/ && tsc --project tsconfig.build.json"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "@noble/curves": "^2.2.0",
+    "@noble/hashes": "^2.2.0",
+    "@peculiar/asn1-ecc": "^2.6.1",
+    "@peculiar/asn1-pkcs8": "^2.6.1",
+    "@peculiar/asn1-schema": "^2.6.0",
+    "@peculiar/asn1-x509": "^2.6.1",
+    "@scure/base": "^2.0.0"
+  },
+  "files": ["dist"],
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "aspe",
+    "ariadne",
+    "keyoxide"
+  ]
+}
