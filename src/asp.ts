@@ -42,7 +42,7 @@ export class ASPProfile {
     }
 
     /** Profile thumbprint */
-    get thumbprint() { return computeJWKThumbprint(this.pkAsJWK); }
+    get thumbprint(): string { return computeJWKThumbprint(this.pkAsJWK); }
 
     /** Sign profile with secret key */
     sign(secretKey: SecretKey) {
