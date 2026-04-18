@@ -22,17 +22,12 @@ export const computeJWKThumbprint = (jwk: ECJWK): string => {
     return base32nopad.encode(sha512(encoded).subarray(0,16));
 }
 
-export const generateJWK = (publicKey: Uint8Array, privateKey?: Uint8Array): ECJWK => {
-    const jwk: ECJWK = {
-        crv: "P-256",
-        kty: "EC",
-        x: base64urlnopad.encode(publicKey.slice(1,33)),
-        y: base64urlnopad.encode(publicKey.slice(33, 65))
-    }
-    if(privateKey) jwk.d = base64urlnopad.encode(privateKey);
-
-    return jwk;
-}
+export const generateJWK = (publicKey: Uint8Array): ECJWK => ({
+    crv: "P-256",
+    kty: "EC",
+    x: base64urlnopad.encode(publicKey.slice(1,33)),
+    y: base64urlnopad.encode(publicKey.slice(33, 65))
+});
 
 export const getUncompressedPubKeyFromJWK = (jwk: ECJWK): Uint8Array => {
     const x = base64urlnopad.decode(jwk.x);
