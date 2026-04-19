@@ -1,5 +1,5 @@
 import { base32nopad, base64urlnopad } from "@scure/base";
-import type { ECJWK, JWTHeader } from "./types.js";
+import { KeyType, type ECJWK, type EDJWK, type JWTHeader } from "./types.js";
 import { sha512 } from "@noble/hashes/sha2.js";
 
 export const xor = (a: Uint8Array, b: Uint8Array): Uint8Array => {
@@ -10,41 +10,22 @@ export const xor = (a: Uint8Array, b: Uint8Array): Uint8Array => {
     return result;
 }
 
-export const computeJWKThumbprint = (jwk: ECJWK): string => {
+export const computeJWKThumbprint = <T extends Record<string, any>>(jwk: T): string => {
     // RFC 7638, section 3.2 (lexicographic order)
-    const encoded = new TextEncoder().encode(JSON.stringify({
+    const object: Record<string, any> = {
         crv: jwk.crv,
         kty: jwk.kty,
-        x: jwk.x,
-        y: jwk.y
-    }));
+        x: jwk.x
+    }
+    if(jwk.y) object.y = jwk.y;
+    const encoded = new TextEncoder().encode(JSON.stringify(object));
 
     return base32nopad.encode(sha512(encoded).subarray(0,16));
 }
 
-export const generateJWK = (publicKey: Uint8Array): ECJWK => ({
-    crv: "P-256",
-    kty: "EC",
-    x: base64urlnopad.encode(publicKey.slice(1,33)),
-    y: base64urlnopad.encode(publicKey.slice(33, 65))
-});
-
-export const getUncompressedPubKeyFromJWK = (jwk: ECJWK): Uint8Array => {
-    const x = base64urlnopad.decode(jwk.x);
-    const y = base64urlnopad.decode(jwk.y);
-
-    // ANSI X9.62 uncompressed EC point
-    const publicKey = new Uint8Array(65);
-    publicKey[0] = 4;
-    publicKey.set(x, 1);
-    publicKey.set(y, 33);
-        
-    return publicKey;
-}
-
-export const generateHeaderFromJWK = (jwk: ECJWK): JWTHeader => ({
+export const generateHeaderFromJWK = (jwk: EDJWK | ECJWK, keyType: KeyType): JWTHeader => ({
     typ: "JWT",
-    alg: "ES256",
+    alg: keyType == KeyType.EDDSA ? "EdDSA" : "ES256",
     kid: computeJWKThumbprint(jwk),
     jwk
 });

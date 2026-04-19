@@ -1,6 +1,6 @@
 {
   "name": "@li0ard/aspe",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",
@@ -16,10 +16,12 @@
   "description": "simple library for Ariadne Signature Profile (ASP)",
   "license": "MIT",
   "scripts": {
-    "build": "rm -rf dist/ && tsc --project tsconfig.build.json"
+    "build": "rm -rf dist/ && tsc --project tsconfig.build.json",
+    "docs": "typedoc --options .config/typedoc/config.cjs"
   },
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "typedoc": "^0.28.19"
   },
   "peerDependencies": {
     "typescript": "^5"

@@ -4,8 +4,8 @@
     </a><br>
     <b>@li0ard/aspe</b><br>
     <b>simple library for Ariadne Signature Profile (ASP)</b>
-    <!--<br>
-    <a href="https://li0ard.is-cool.dev/aspe">docs</a>-->
+    <br>
+    <a href="https://li0ard.is-cool.dev/aspe">docs</a>
     <br><br>
     <a href="https://github.com/li0ard/aspe/actions/workflows/test.yml"><img src="https://github.com/li0ard/aspe/actions/workflows/test.yml/badge.svg" /></a>
     <a href="https://github.com/li0ard/aspe/blob/main/LICENSE"><img src="https://img.shields.io/github/license/li0ard/aspe" /></a>
@@ -20,9 +20,9 @@
 
 - Simple: Hides decoding process and provides simple and modern API
 - Type-Safe: Most of the APIs are strictly typed to help your workflow
-- Compliance: Complies with [Ariadne Signature Profile v0](https://ariadne.id/related/ariadne-signature-profile-0)
+- Compliance: Fully complies with [Ariadne Signature Profile v0](https://ariadne.id/related/ariadne-signature-profile-0)
 - Supports Bun, Node.js, Deno, Browsers, Cloudflare Workers
-- Supports ES256 lightweight keypairs and profile/request JWS
+- Supports ES256 and EdDSA (ED25519) keypairs and profile/request JWS
 
 ## Installation
 
@@ -37,9 +37,9 @@ bunx jsr add @li0ard/aspe
 ## Usage
 ### Create profile
 ```ts
-import { ASPProfile, SecretKey } from "@li0ard/aspe";
+import { ASPProfile, SecretKey, KeyType } from "@li0ard/aspe";
 
-const key = SecretKey.generate();
+const key = SecretKey.generate(KeyType.ES256);
 const profile = new ASPProfile(
     key.publicKey,
     "Alice",

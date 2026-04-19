@@ -1,5 +1,5 @@
-/** Encrypted secret key */
-export interface EncryptedSecretKey {
+/** Encrypted data */
+export interface EncryptedData {
     /** PBKDF algorithm */
     alg: "scrypt";
     /** PBKDF parameters (scrypt)*/
@@ -17,14 +17,18 @@ export interface EncryptedSecretKey {
     key: string;
 }
 
-/** ES256 JWK */
-export interface ECJWK {
+/** EdDSA JWK */
+export interface EDJWK {
     /** Curve */
     crv: string;
     /** Key type */
     kty: string;
     /** X coordinate */ 
     x: string;
+}
+
+/** ES256 JWK */
+export interface ECJWK extends EDJWK {
     /** Y coordinate */
     y: string;
 }
@@ -47,7 +51,12 @@ export interface ASPProfilePayload extends ASPBase {
     "http://ariadne.id/description"?: string;
     /** Profile color */
     "http://ariadne.id/color"?: string;
-
+    /** Profile Avatar URL */
+    "http://ariadne.id/avatar_url"?: string;
+    /** Profile Email */
+    "http://ariadne.id/email"?: string;
+    /** Expire claim */
+    "exp"?: number;
 }
 
 /** ASP request object */
@@ -69,7 +78,7 @@ export interface JWTHeader {
     /** Key ID */
     kid: string;
     /** Key JWK object */
-    jwk: ECJWK;
+    jwk: EDJWK | ECJWK;
 }
 
 /** Request actions */
@@ -81,3 +90,22 @@ export enum RequestAction {
     /** Delete profile */
     DELETE = "delete"
 }
+
+/** Key types */
+export enum KeyType {
+    /** ES256 (ECDSA P-256) */
+    ES256,
+    /** EdDSA (ED25519) */
+    EDDSA
+}
+
+export interface KeyAlgorithm {
+    validatePublicKeyBlob(publicKey: Uint8Array): void;
+    getPublicKey(privateKey: Uint8Array): Uint8Array;
+    getRandomPrivateKey(): Uint8Array;
+    sign(privateKey: Uint8Array, message: Uint8Array): Uint8Array;
+    verify(publicKey: Uint8Array, message: Uint8Array, signature: Uint8Array): boolean;
+    generateJWKFromPubKey(publicKey: Uint8Array): EDJWK | ECJWK;
+    getUncompressedPubKeyFromJWK(jwk: EDJWK | ECJWK): Uint8Array;
+    serializePrivateKeyToDER(privateKey: Uint8Array, publicKey: Uint8Array): Uint8Array;
+} 
