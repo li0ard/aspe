@@ -41,6 +41,7 @@ import { ASPProfile, SecretKey, KeyType } from "@li0ard/aspe";
 
 const key = SecretKey.generate(KeyType.ES256);
 const profile = new ASPProfile(
+    key.keyType,
     key.publicKey,
     "Alice",
     "Hello, B0b",

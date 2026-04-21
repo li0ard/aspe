@@ -104,7 +104,7 @@ export class ASPProfile {
 
         const header = encodeJsonToBase64(generateHeaderFromJWK(this.pkAsJWK, this.keyType));
         const payload = encodeJsonToBase64(requestData);
-        const signature = this.algorithm.sign(secretKey.privateKey, utf8ToBytes(this.dataToBeSigned));
+        const signature = this.algorithm.sign(secretKey.privateKey, utf8ToBytes(`${header}.${payload}`));
 
         return `${header}.${payload}.${base64urlnopad.encode(signature)}`;
     }
